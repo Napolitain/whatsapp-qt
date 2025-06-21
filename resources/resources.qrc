@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>icons/03_PNG/Green/Digital_Glyph_Green.png</file>
+    </qresource>
+</RCC>
