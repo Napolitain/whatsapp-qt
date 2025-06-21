@@ -14,6 +14,15 @@ class Tray : public QObject {
 	QAction *m_action_hide;
 	QAction *m_action_quit;
 
+	// Autostart action
+	QAction *m_action_autostart;
+	QString m_appName;
+	QString m_execPath;
+	QString m_iconPath;
+
+private slots:
+	void toggleAutostart();
+
 public:
 	Tray(const QIcon &icon, const QWidget *mainWindow, QObject *parent = nullptr);
 

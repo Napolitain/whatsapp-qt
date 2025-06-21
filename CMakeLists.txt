@@ -12,6 +12,8 @@ find_package(Qt6 REQUIRED COMPONENTS
         WebEngineWidgets
 )
 
+find_package(fmt CONFIG REQUIRED)
+
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.hpp)
 qt6_add_resources(RCC_SOURCES resources/resources.qrc)
@@ -27,6 +29,7 @@ target_link_libraries(WhatsApp
         Qt::Gui
         Qt::Widgets
         Qt::WebEngineWidgets
+        fmt::fmt
 )
 
 target_include_directories(WhatsApp PRIVATE include)

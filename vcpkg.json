@@ -2,5 +2,6 @@
   "version": "1.0",
   "name": "whatsapp",
   "dependencies": [
+    "fmt"
   ]
 }
