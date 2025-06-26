@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QObject>
 
-class Tray : public QObject {
+class Tray final : public QObject {
 	Q_OBJECT
 
 	QSystemTrayIcon *m_trayIcon;
@@ -24,7 +24,7 @@ private slots:
 	void toggleAutostart();
 
 public:
-	Tray(const QIcon &icon, const QWidget *mainWindow, QObject *parent = nullptr);
+	Tray(const QIcon &icon, const QWidget *mainWindow, const QString &iconPath, QObject *parent = nullptr);
 
 	[[nodiscard]] bool isTrayVisible() const;
 

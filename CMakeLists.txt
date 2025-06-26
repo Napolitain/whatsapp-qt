@@ -13,6 +13,7 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 
 find_package(fmt CONFIG REQUIRED)
+find_package(glog CONFIG REQUIRED)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.hpp)
@@ -30,6 +31,7 @@ target_link_libraries(WhatsApp
         Qt::Widgets
         Qt::WebEngineWidgets
         fmt::fmt
+        glog::glog
 )
 
 target_include_directories(WhatsApp PRIVATE include)

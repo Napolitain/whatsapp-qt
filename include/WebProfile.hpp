@@ -10,5 +10,5 @@ class WebProfile {
 public:
 	WebProfile(QObject *parent, const QString &dataDir);
 
-	QWebEngineProfile *profile() const;
+	[[nodiscard]] QWebEngineProfile *profile() const;
 };

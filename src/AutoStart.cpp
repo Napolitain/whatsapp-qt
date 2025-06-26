@@ -16,9 +16,9 @@
 
 bool AutoStart::enable(const QString &appName, const QString &execPath, const QString &iconPath) {
 #ifdef Q_OS_LINUX
-    QString autostartDir = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/autostart";
+    const QString autostartDir = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/autostart";
     QDir().mkpath(autostartDir);
-    QString desktopFile = autostartDir + "/" + appName + ".desktop";
+    const QString desktopFile = autostartDir + "/" + appName + ".desktop";
     QFile file(desktopFile);
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
         QTextStream out(&file);
@@ -76,8 +76,8 @@ bool AutoStart::enable(const QString &appName, const QString &execPath, const QS
 
 bool AutoStart::disable(const QString &appName) {
 #ifdef Q_OS_LINUX
-    QString desktopFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
-                          + "/autostart/" + appName + ".desktop";
+    const QString desktopFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+                                + "/autostart/" + appName + ".desktop";
     return QFile::remove(desktopFile);
 #elif defined(Q_OS_WIN)
     wchar_t* path = nullptr;

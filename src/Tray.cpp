@@ -3,14 +3,19 @@
 #include <qcoreapplication.h>
 #include <QMenu>
 #include <fmt/base.h>
+#include <glog/logging.h>
 
 #include "AutoStart.hpp"
 #include "Constants.hpp"
 
-Tray::Tray(const QIcon &icon, const QWidget *mainWindow, QObject *parent) {
+Tray::Tray(const QIcon &icon, const QWidget *mainWindow, const QString &iconPath, QObject *parent) {
 	m_trayIcon = new QSystemTrayIcon(icon, parent);
 
 	m_tray_menu = new QMenu;
+
+	m_appName = APP_NAME;
+	m_execPath = QCoreApplication::applicationFilePath();
+	m_iconPath = iconPath;
 
 	m_action_show = m_tray_menu->addAction("Show");
 	connect(m_action_show, &QAction::triggered, mainWindow, &QWidget::show);
@@ -40,8 +45,10 @@ void Tray::toggleAutostart() {
 	bool enabled = AutoStart::isEnabled(m_appName);
 	if (enabled) {
 		AutoStart::disable(m_appName);
+		LOG(INFO) << "Autostart disabled";
 	} else {
 		AutoStart::enable(m_appName, m_execPath, m_iconPath);
+		LOG(INFO) << "Autostart enabled";
 	}
 
 	m_action_autostart->setText(
