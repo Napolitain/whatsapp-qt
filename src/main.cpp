@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     const auto view = new WhatsAppView();
     view->setPage(page);
     view->setUrl(QUrl(URL));
-    view->resize(1400, 1000);
+    view->resize(WIDTH, HEIGHT);
     view->show();
 
     // Create tray icon

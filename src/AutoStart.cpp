@@ -29,8 +29,9 @@ bool AutoStart::enable(const QString &appName, const QString &execPath, const QS
         out << "NoDisplay=false\n";
         out << "X-GNOME-Autostart-enabled=true\n";
         out << "Name=" << appName << "\n";
-        if (!iconPath.isEmpty())
+        if (!iconPath.isEmpty()) {
             out << "Icon=" << iconPath << "\n";
+        }
         file.close();
         return true;
     }
@@ -96,8 +97,8 @@ bool AutoStart::disable(const QString &appName) {
 
 bool AutoStart::isEnabled(const QString &appName) {
 #ifdef Q_OS_LINUX
-    QString desktopFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
-                          + "/autostart/" + appName + ".desktop";
+    const QString desktopFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+                                + "/autostart/" + appName + ".desktop";
     return QFile::exists(desktopFile);
 #elif defined(Q_OS_WIN)
     wchar_t* path = nullptr;
