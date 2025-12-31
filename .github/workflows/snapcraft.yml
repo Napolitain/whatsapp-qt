@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  SNAP_RELEASE_CHANNELS: edge
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            ninja-build \
+            qt6-base-dev \
+            qt6-tools-dev \
+            qt6-webengine-dev \
+            libgl1-mesa-dev
+
+      - name: Setup vcpkg
+        uses: microsoft/setup-vcpkg@v1
+        with:
+          vcpkg-json: ${{ github.workspace }}/vcpkg.json
+          cache-key: linux-vcpkg-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+          cache-restore-keys: |
+            linux-vcpkg-
+
+      - name: Configure
+        run: cmake -B build -S . -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+  snapcraft:
+    name: Build and publish Snap
+    runs-on: ubuntu-22.04
+    needs: build
+    permissions:
+      contents: read
+    concurrency:
+      group: snapcraft-${{ github.ref }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build snap
+        id: snapcraft
+        uses: snapcore/action-build@v1
+        with:
+          path: .
+          snapcraft-channel: latest/stable
+          use-lxd: true
+
+      - name: Upload snap artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: whatsapp-qt-snap
+          path: ${{ steps.snapcraft.outputs.snap }}
+
+      - name: Publish to Snap Store
+        # SNAPCRAFT_LOGIN must contain credentials from `snapcraft export-login -`.
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: snapcore/action-publish@v1
+        with:
+          snap: ${{ steps.snapcraft.outputs.snap }}
+          release: ${{ env.SNAP_RELEASE_CHANNELS }}
+          store_login: ${{ secrets.SNAPCRAFT_LOGIN }}
