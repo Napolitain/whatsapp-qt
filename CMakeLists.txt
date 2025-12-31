@@ -5,7 +5,7 @@ include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-O3 -flto -Wpedantic -Wall -Wextra -Wsign-conversion -Wconversion")
+set(CMAKE_CXX_FLAGS "-O2 -Wpedantic -Wall -Wextra -Wsign-conversion -Wconversion")
 
 find_package(Qt6 REQUIRED COMPONENTS
         Core
