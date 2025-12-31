@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.31)
 project(WhatsApp)
 
+include(GNUInstallDirs)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-O3 -flto -Wpedantic -Wall -Wextra -Wsign-conversion -Wconversion")
@@ -40,4 +42,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         AUTOMOC ON
         AUTOUIC ON
         AUTORCC ON
+)
+
+install(TARGETS WhatsApp
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

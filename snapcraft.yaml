@@ -1,0 +1,54 @@
+name: whatsapp-qt
+base: core24
+version: git
+summary: Qt-based WhatsApp desktop client
+description: |
+  whatsapp-qt is a Qt 6 desktop client that integrates WhatsApp functionality with native
+  system capabilities, including notifications and tray controls.
+grade: stable
+confinement: strict
+
+platforms:
+  amd64:
+  arm64:
+    build-on: [amd64, arm64]
+    build-for: [arm64]
+
+apps:
+  whatsapp-qt:
+    command: usr/bin/WhatsApp
+    extensions:
+      - kde-neon-6
+    plugs:
+      - audio-playback
+      - audio-record
+      - camera
+      - desktop
+      - desktop-legacy
+      - network
+      - network-bind
+      - opengl
+      - screen-inhibit-control
+      - wayland
+      - x11
+
+parts:
+  whatsapp-qt:
+    plugin: cmake
+    source: .
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+    build-packages:
+      - build-essential
+      - cmake
+      - libfmt-dev
+      - libgl1-mesa-dev
+      - libgoogle-glog-dev
+      - ninja-build
+      - pkg-config
+      - qt6-base-dev
+      - qt6-tools-dev
+      - qt6-webengine-dev
+    stage-packages:
+      - libfmt-dev
+      - libgoogle-glog-dev
