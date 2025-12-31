@@ -16,18 +16,28 @@ platforms:
 apps:
   whatsapp-qt:
     command: usr/bin/WhatsApp
-    extensions:
-      - kde-neon-6
     plugs:
       - audio-playback
       - audio-record
       - camera
       - desktop
+      - desktop-legacy
       - network
       - network-bind
       - opengl
       - screen-inhibit-control
       - wayland
+      - x11
+    environment:
+      # Qt platform
+      QT_QPA_PLATFORM: wayland;xcb
+      # Disable Qt's internal high-DPI scaling
+      QT_AUTO_SCREEN_SCALE_FACTOR: '0'
+      # XDG
+      XDG_DATA_DIRS: $SNAP/usr/share:$XDG_DATA_DIRS
+      # Qt WebEngine
+      QTWEBENGINE_DICTIONARIES_PATH: $SNAP/usr/share/hunspell
+      QTWEBENGINE_CHROMIUM_FLAGS: "--no-sandbox"
 
 parts:
   whatsapp-qt:
@@ -36,7 +46,6 @@ parts:
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - "-DCMAKE_EXE_LINKER_FLAGS=-L/snap/kde-qt6-core24-sdk/current/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/snap/kde-qt6-core24-sdk/current/usr/lib/x86_64-linux-gnu"
     build-packages:
       - build-essential
       - cmake
@@ -47,9 +56,26 @@ parts:
       - python3
       - unzip
       - zip
-      - libevent-dev
-      - libxkbcommon-dev
-      - duktape-dev
+      - qt6-base-dev
+      - qt6-tools-dev
+      - qt6-webengine-dev
+      - libgl1-mesa-dev
+    stage-packages:
+      - libqt6core6t64
+      - libqt6gui6
+      - libqt6widgets6
+      - libqt6webenginecore6
+      - libqt6webenginewidgets6
+      - libqt6network6
+      - libqt6dbus6
+      - libgl1
+      - libglx0
+      - libglvnd0
+      - libegl1
+      - libgles2
+      - libx11-6
+      - libxcb1
+      - libxkbcommon0
     build-environment:
       - VCPKG_ROOT: "${CRAFT_PART_BUILD}/vcpkg"
       - VCPKG_DEFAULT_BINARY_CACHE: "${CRAFT_PART_BUILD}/.vcpkg-cache"
