@@ -1,10 +1,17 @@
 name: whatsapp-qt
+title: WhatsApp Qt
 base: core24
 version: git
 summary: Qt-based WhatsApp desktop client
 description: |
   whatsapp-qt is a Qt 6 desktop client that integrates WhatsApp functionality with native
   system capabilities, including notifications and tray controls.
+license: MIT
+icon: resources/icon.png
+website: https://github.com/Napolitain/whatsapp-qt
+source-code: https://github.com/Napolitain/whatsapp-qt
+issues: https://github.com/Napolitain/whatsapp-qt/issues
+contact: https://github.com/Napolitain/whatsapp-qt/issues
 grade: stable
 confinement: strict
 
