@@ -46,6 +46,7 @@ parts:
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_TOOLCHAIN_FILE=${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake
     build-packages:
       - build-essential
       - cmake
