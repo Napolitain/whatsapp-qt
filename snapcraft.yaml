@@ -41,14 +41,30 @@ parts:
     build-packages:
       - build-essential
       - cmake
-      - libfmt-dev
-      - libgl1-mesa-dev
-      - libgoogle-glog-dev
+      - curl
+      - git
       - ninja-build
       - pkg-config
-      - qt6-base-dev
-      - qt6-tools-dev
-      - qt6-webengine-dev
-    stage-packages:
-      - libfmt-dev
-      - libgoogle-glog-dev
+      - python3
+      - unzip
+      - zip
+    build-environment:
+      - VCPKG_ROOT: "${CRAFT_PART_BUILD}/vcpkg"
+      - VCPKG_DEFAULT_BINARY_CACHE: "${CRAFT_PART_BUILD}/.vcpkg-cache"
+      - VCPKG_FEATURE_FLAGS: manifests,manifests-allow-registries
+      - VCPKG_LIBRARY_LINKAGE: static
+      - CMAKE_TOOLCHAIN_FILE: "${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    override-build: |
+      set -eux
+      case "$CRAFT_TARGET_ARCH" in
+        amd64) export VCPKG_DEFAULT_TRIPLET="x64-linux" ;;
+        arm64) export VCPKG_DEFAULT_TRIPLET="arm64-linux" ;;
+        *) echo "Unsupported architecture: $CRAFT_TARGET_ARCH" >&2; exit 1 ;;
+      esac
+      export VCPKG_DEFAULT_HOST_TRIPLET="$VCPKG_DEFAULT_TRIPLET"
+      if [ ! -d "$VCPKG_ROOT" ]; then
+        git clone --depth=1 https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
+      fi
+      "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
+      mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+      snapcraftctl build

@@ -15,6 +15,12 @@ concurrency:
 
 env:
   SNAP_RELEASE_CHANNELS: edge
+  VCPKG_ROOT: ${{ github.workspace }}/.vcpkg
+  VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
+  VCPKG_FEATURE_FLAGS: manifests,manifests-allow-registries
+  VCPKG_LIBRARY_LINKAGE: static
+  VCPKG_DEFAULT_TRIPLET: x64-linux
+  VCPKG_DEFAULT_HOST_TRIPLET: x64-linux
 
 jobs:
   build:
@@ -35,13 +41,22 @@ jobs:
             qt6-webengine-dev \
             libgl1-mesa-dev
 
-      - name: Setup vcpkg
-        uses: microsoft/setup-vcpkg@v1
+      - name: Prepare vcpkg cache directory
+        run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+
+      - name: Restore vcpkg binary cache
+        uses: actions/cache@v4
         with:
-          vcpkg-json: ${{ github.workspace }}/vcpkg.json
-          cache-key: linux-vcpkg-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
-          cache-restore-keys: |
-            linux-vcpkg-
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+
+      - name: Bootstrap vcpkg
+        run: |
+          rm -rf "$VCPKG_ROOT"
+          git clone --depth=1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
+          "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
       - name: Configure
         run: cmake -B build -S . -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
