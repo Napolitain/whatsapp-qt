@@ -97,10 +97,10 @@ jobs:
           path: ${{ steps.snapcraft.outputs.snap }}
 
       - name: Publish to Snap Store
-        # SNAPCRAFT_LOGIN must contain credentials from `snapcraft export-login -`.
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         with:
           snap: ${{ steps.snapcraft.outputs.snap }}
           release: ${{ env.SNAP_RELEASE_CHANNELS }}
-          store_login: ${{ secrets.SNAPCRAFT_LOGIN }}
