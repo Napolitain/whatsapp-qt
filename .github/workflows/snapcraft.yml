@@ -39,7 +39,8 @@ jobs:
             qt6-base-dev \
             qt6-tools-dev \
             qt6-webengine-dev \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            ccache
 
       - name: Prepare vcpkg cache directory
         run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
@@ -52,6 +53,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vcpkg-
 
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
+
       - name: Bootstrap vcpkg
         run: |
           rm -rf "$VCPKG_ROOT"
@@ -59,7 +68,7 @@ jobs:
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
       - name: Configure
-        run: cmake -B build -S . -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -S . -G Ninja -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
         run: cmake --build build --config Release --parallel
