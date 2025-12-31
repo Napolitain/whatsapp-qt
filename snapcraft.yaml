@@ -56,10 +56,11 @@ parts:
       - CMAKE_TOOLCHAIN_FILE: "${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     override-build: |
       set -eux
-      case "$CRAFT_TARGET_ARCH" in
+      arch="${CRAFT_ARCH_BUILD_FOR:-$CRAFT_TARGET_ARCH}"
+      case "$arch" in
         amd64) export VCPKG_DEFAULT_TRIPLET="x64-linux" ;;
         arm64) export VCPKG_DEFAULT_TRIPLET="arm64-linux" ;;
-        *) echo "Unsupported architecture: $CRAFT_TARGET_ARCH" >&2; exit 1 ;;
+        *) echo "Unsupported architecture: $arch" >&2; exit 1 ;;
       esac
       export VCPKG_DEFAULT_HOST_TRIPLET="$VCPKG_DEFAULT_TRIPLET"
       if [ ! -d "$VCPKG_ROOT" ]; then
