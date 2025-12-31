@@ -10,9 +10,8 @@ confinement: strict
 
 platforms:
   amd64:
-  arm64:
-    build-on: [amd64, arm64]
-    build-for: [arm64]
+    build-on: [amd64]
+    build-for: [amd64]
 
 apps:
   whatsapp-qt:
@@ -24,13 +23,11 @@ apps:
       - audio-record
       - camera
       - desktop
-      - desktop-legacy
       - network
       - network-bind
       - opengl
       - screen-inhibit-control
       - wayland
-      - x11
 
 parts:
   whatsapp-qt:
@@ -56,13 +53,13 @@ parts:
       - CMAKE_TOOLCHAIN_FILE: "${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     override-build: |
       set -eux
-      arch="${CRAFT_ARCH_BUILD_FOR:-$CRAFT_TARGET_ARCH}"
-      case "$arch" in
-        amd64) export VCPKG_DEFAULT_TRIPLET="x64-linux" ;;
-        arm64) export VCPKG_DEFAULT_TRIPLET="arm64-linux" ;;
-        *) echo "Unsupported architecture: $arch" >&2; exit 1 ;;
-      esac
-      export VCPKG_DEFAULT_HOST_TRIPLET="$VCPKG_DEFAULT_TRIPLET"
+      arch="${CRAFT_ARCH_BUILD_FOR:-${CRAFT_TARGET_ARCH:-amd64}}"
+      if [ "$arch" != "amd64" ]; then
+        echo "Unsupported architecture: $arch" >&2
+        exit 1
+      fi
+      export VCPKG_DEFAULT_TRIPLET="x64-linux"
+      export VCPKG_DEFAULT_HOST_TRIPLET="x64-linux"
       if [ ! -d "$VCPKG_ROOT" ]; then
         git clone --depth=1 https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
       fi
