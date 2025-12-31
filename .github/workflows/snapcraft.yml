@@ -98,9 +98,7 @@ jobs:
 
       - name: Publish to Snap Store
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: snapcore/action-publish@v1
         env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        with:
-          snap: ${{ steps.snapcraft.outputs.snap }}
-          release: ${{ env.SNAP_RELEASE_CHANNELS }}
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_LOGIN }}
+        run: |
+          snapcraft upload --release=${{ env.SNAP_RELEASE_CHANNELS }} ${{ steps.snapcraft.outputs.snap }}
