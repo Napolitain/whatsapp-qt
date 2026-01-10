@@ -124,4 +124,4 @@ parts:
       craftctl default
     organize:
       usr/share/applications/whatsapp-qt.desktop: meta/gui/whatsapp-qt.desktop
-      usr/share/icons/hicolor/256x256/apps/WhatsApp.png: meta/gui/icons/hicolor/256x256/apps/WhatsApp.png
+      usr/share/icons/hicolor/256x256/apps/WhatsApp.png: meta/gui/icons/hicolor/256x256/apps/snap.whatsapp-qt.png
