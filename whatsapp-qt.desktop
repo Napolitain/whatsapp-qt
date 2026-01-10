@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=WhatsApp
+Comment=Qt-based WhatsApp desktop client
+Exec=whatsapp-qt
+Icon=WhatsApp
+Terminal=false
+Categories=Network;InstantMessaging;
+StartupWMClass=WhatsApp

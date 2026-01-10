@@ -9,7 +9,15 @@
 
 #include "Constants.hpp"
 
+static bool isRunningInSnap() {
+	return qEnvironmentVariableIsSet("SNAP");
+}
+
 bool AppRegistration::registerApp() {
+	// Skip registration in snap - snap provides desktop integration
+	if (isRunningInSnap()) {
+		return true;
+	}
 	// 1. Copy icon
 	const QString iconDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
 	                        + "/icons/hicolor/256x256/apps";
@@ -42,6 +50,9 @@ bool AppRegistration::registerApp() {
 }
 
 bool AppRegistration::unregisterApp() {
+	if (isRunningInSnap()) {
+		return true;
+	}
 	const QString desktopFile = QDir::homePath() + "/.local/share/applications/" + APP_NAME + ".desktop";
 	const QString iconFile = QDir::homePath() + "/.local/share/icons/hicolor/256x256/apps/" + APP_NAME + ".png";
 	const bool ok1 = QFile::remove(desktopFile);
@@ -50,6 +61,9 @@ bool AppRegistration::unregisterApp() {
 }
 
 bool AppRegistration::isRegistered() {
+	if (isRunningInSnap()) {
+		return true;
+	}
 	const QString desktopFile = QDir::homePath() + "/.local/share/applications/" + APP_NAME + ".desktop";
 	const QString iconFile = QDir::homePath() + "/.local/share/icons/hicolor/256x256/apps/" + APP_NAME + ".png";
 	return QFile::exists(desktopFile) && QFile::exists(iconFile);

@@ -44,6 +44,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         AUTORCC ON
 )
 
-install(TARGETS WhatsApp
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+# Install rules
+install(TARGETS WhatsApp DESTINATION bin)
+install(FILES resources/icon.png 
+        DESTINATION share/icons/hicolor/256x256/apps 
+        RENAME WhatsApp.png)
+install(FILES whatsapp-qt.desktop 
+        DESTINATION share/applications)

@@ -122,3 +122,6 @@ parts:
       "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
       mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
       craftctl default
+    organize:
+      usr/share/applications/whatsapp-qt.desktop: meta/gui/whatsapp-qt.desktop
+      usr/share/icons/hicolor/256x256/apps/WhatsApp.png: meta/gui/icons/hicolor/256x256/apps/WhatsApp.png
