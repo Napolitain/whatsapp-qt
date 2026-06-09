@@ -9,13 +9,12 @@
 
 #include "Constants.hpp"
 
-static bool isRunningInSnap() {
-	return qEnvironmentVariableIsSet("SNAP");
+static bool isRegistrationManagedExternally() {
+	return qEnvironmentVariableIsSet("SNAP") || qEnvironmentVariableIsSet("WHATSAPP_QT_SKIP_APP_REGISTRATION");
 }
 
 bool AppRegistration::registerApp() {
-	// Skip registration in snap - snap provides desktop integration
-	if (isRunningInSnap()) {
+	if (isRegistrationManagedExternally()) {
 		return true;
 	}
 	// 1. Copy icon
@@ -50,7 +49,7 @@ bool AppRegistration::registerApp() {
 }
 
 bool AppRegistration::unregisterApp() {
-	if (isRunningInSnap()) {
+	if (isRegistrationManagedExternally()) {
 		return true;
 	}
 	const QString desktopFile = QDir::homePath() + "/.local/share/applications/" + APP_NAME + ".desktop";
@@ -61,7 +60,7 @@ bool AppRegistration::unregisterApp() {
 }
 
 bool AppRegistration::isRegistered() {
-	if (isRunningInSnap()) {
+	if (isRegistrationManagedExternally()) {
 		return true;
 	}
 	const QString desktopFile = QDir::homePath() + "/.local/share/applications/" + APP_NAME + ".desktop";
