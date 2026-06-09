@@ -11,7 +11,6 @@ whatsapp-qt is a Qt 6 desktop client for WhatsApp Web, providing native system i
 - **Language**: C++20
 - **Framework**: Qt 6 (Core, Gui, Widgets, WebEngineWidgets)
 - **Build System**: CMake 3.28+
-- **Package Manager**: vcpkg (for fmt, glog)
 - **Packaging**: Snapcraft (kde-neon-6 extension)
 
 ## Building
@@ -20,26 +19,20 @@ whatsapp-qt is a Qt 6 desktop client for WhatsApp Web, providing native system i
 
 - CMake 3.28+
 - Qt 6.x with WebEngine
-- vcpkg
 - C++20 compatible compiler (GCC 13+, Clang 16+)
 
 ### Normal CMake Build
 
 ```bash
-# Clone and bootstrap vcpkg (if not already installed)
-git clone https://github.com/microsoft/vcpkg.git
-./vcpkg/bootstrap-vcpkg.sh
-
-# Configure with vcpkg toolchain
+# Configure
 cmake -B build -S . \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+  -DCMAKE_BUILD_TYPE=Release
 
 # Build
 cmake --build build -j$(nproc)
 
 # Run
-./build/WhatsApp
+./build/whatsapp-qt
 ```
 
 ### Snapcraft Build
@@ -67,7 +60,6 @@ sudo snap install --dangerous ./whatsapp-qt_*.snap
 whatsapp-qt/
 ├── CMakeLists.txt          # Main build configuration
 ├── snapcraft.yaml          # Snap packaging configuration
-├── vcpkg.json              # vcpkg dependencies manifest
 ├── include/                # Header files
 │   ├── AppRegistration.hpp
 │   ├── AutoStart.hpp

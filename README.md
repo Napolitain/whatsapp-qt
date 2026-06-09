@@ -24,7 +24,6 @@ sudo snap install whatsapp-qt
 
 - CMake 3.28+
 - Qt 6.x with WebEngine module
-- vcpkg
 - C++20 compatible compiler (GCC 13+, Clang 16+)
 
 #### Build Steps
@@ -34,20 +33,15 @@ sudo snap install whatsapp-qt
 git clone https://github.com/napolitain/whatsapp-qt.git
 cd whatsapp-qt
 
-# Clone and bootstrap vcpkg
-git clone https://github.com/microsoft/vcpkg.git
-./vcpkg/bootstrap-vcpkg.sh
-
 # Configure
 cmake -B build -S . \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+  -DCMAKE_BUILD_TYPE=Release
 
 # Build
 cmake --build build -j$(nproc)
 
 # Run
-./build/WhatsApp
+./build/whatsapp-qt
 ```
 
 ### Building the Snap Package

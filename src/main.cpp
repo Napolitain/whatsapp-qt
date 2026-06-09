@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QDir>
-#include <glog/logging.h>
+#include <QDebug>
 
 #include "Constants.hpp"
 #include "WebProfile.hpp"
@@ -12,14 +12,11 @@
 #include "AppRegistration.hpp"
 
 int main(int argc, char *argv[]) {
-    // Initialize Google Log
-    google::InitGoogleLogging(argv[0]);
-
     QApplication app(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
 
     if (!AppRegistration::isRegistered()) {
-        LOG(INFO) << "Registering application";
+        qInfo() << "Registering application";
         AppRegistration::registerApp();
     }
 
@@ -65,4 +62,3 @@ int main(int argc, char *argv[]) {
 
     return QApplication::exec();
 }
-

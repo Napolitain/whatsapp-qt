@@ -22,7 +22,7 @@ platforms:
 
 apps:
   whatsapp-qt:
-    command: usr/bin/WhatsApp
+    command: usr/bin/whatsapp-qt
     plugs:
       - audio-playback
       - audio-record
@@ -58,17 +58,12 @@ parts:
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_TOOLCHAIN_FILE=${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake
     build-packages:
       - build-essential
       - cmake
-      - curl
-      - git
       - ninja-build
       - pkg-config
       - python3
-      - unzip
-      - zip
       - qt6-base-dev
       - qt6-tools-dev
       - qt6-webengine-dev
@@ -106,27 +101,6 @@ parts:
       - libnspr4
       - libexpat1
       - libdbus-1-3
-    build-environment:
-      - VCPKG_ROOT: "${CRAFT_PART_BUILD}/vcpkg"
-      - VCPKG_DEFAULT_BINARY_CACHE: "${CRAFT_PART_BUILD}/.vcpkg-cache"
-      - VCPKG_FEATURE_FLAGS: manifests,manifests-allow-registries
-      - VCPKG_LIBRARY_LINKAGE: static
-      - CMAKE_TOOLCHAIN_FILE: "${CRAFT_PART_BUILD}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-    override-build: |
-      set -eux
-      arch="${CRAFT_ARCH_BUILD_FOR:-${CRAFT_TARGET_ARCH:-amd64}}"
-      if [ "$arch" != "amd64" ]; then
-        echo "Unsupported architecture: $arch" >&2
-        exit 1
-      fi
-      export VCPKG_DEFAULT_TRIPLET="x64-linux"
-      export VCPKG_DEFAULT_HOST_TRIPLET="x64-linux"
-      if [ ! -d "$VCPKG_ROOT" ]; then
-        git clone --depth=1 https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
-      fi
-      "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
-      mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
-      craftctl default
     organize:
       usr/share/applications/whatsapp-qt.desktop: meta/gui/whatsapp-qt.desktop
       usr/share/icons/hicolor/256x256/apps/WhatsApp.png: meta/gui/icons/hicolor/256x256/apps/snap.whatsapp-qt.png

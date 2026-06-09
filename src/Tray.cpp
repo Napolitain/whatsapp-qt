@@ -1,9 +1,8 @@
 #include "Tray.hpp"
 
 #include <qcoreapplication.h>
+#include <QDebug>
 #include <QMenu>
-#include <fmt/base.h>
-#include <glog/logging.h>
 
 #include "AutoStart.hpp"
 #include "Constants.hpp"
@@ -45,10 +44,10 @@ void Tray::toggleAutostart() {
 	bool enabled = AutoStart::isEnabled(m_appName);
 	if (enabled) {
 		AutoStart::disable(m_appName);
-		LOG(INFO) << "Autostart disabled";
+		qInfo() << "Autostart disabled";
 	} else {
 		AutoStart::enable(m_appName, m_execPath, m_iconPath);
-		LOG(INFO) << "Autostart enabled";
+		qInfo() << "Autostart enabled";
 	}
 
 	m_action_autostart->setText(
